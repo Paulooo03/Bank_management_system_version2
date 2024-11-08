@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.bank_management_system.TransactionHistoryController">
+   <children>
+      <TableView fx:id="transactionTable" layoutX="14.0" layoutY="44.0" prefHeight="200.0" prefWidth="600.0">
+         <columns>
+            <TableColumn fx:id="dateColumn" text="Date" />
+            <TableColumn fx:id="typeColumn" text="Type" />
+            <TableColumn fx:id="amountColumn" text="Amount" />
+            <TableColumn fx:id="balanceColumn" text="Balance" />
+            <TableColumn fx:id="descriptionColumn" text="Description" />
+         </columns>
+      </TableView>
+      <Button fx:id="activateOrDeactivate" layoutX="14.0" layoutY="250.0" text="Activate/Deactivate" onAction="#onActivateOrDeactivateClick"/>
+   </children>
+</AnchorPane>
