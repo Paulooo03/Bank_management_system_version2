@@ -15,7 +15,6 @@ import javafx.stage.Stage;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 public class HelloController {
@@ -29,8 +28,8 @@ public class HelloController {
     @FXML
     private Button onManagerClick;
 
-    private final Map<String, String> managerCredentials = new HashMap<>();
-    private final Map<String, String> tellerCredentials = new HashMap<>();
+    private final HashMapStructure<String, String> managerCredentials = new HashMapStructure<>();
+    private final HashMapStructure<String, String> tellerCredentials = new HashMapStructure<>();
 
     public HelloController() {
         loadCredentialsFromCSV();
@@ -141,10 +140,10 @@ public class HelloController {
         Map<String, String> credentials;
         switch (role) {
             case "Manager":
-                credentials = managerCredentials;
+                credentials = (Map<String, String>) managerCredentials;
                 break;
             case "Teller":
-                credentials = tellerCredentials;
+                credentials = (Map<String, String>) tellerCredentials;
                 break;
             case "Client":
                 return true; // Bypass login for Client
