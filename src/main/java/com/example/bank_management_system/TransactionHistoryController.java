@@ -15,8 +15,6 @@ import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class TransactionHistoryController {
     @FXML
@@ -129,18 +127,17 @@ public class TransactionHistoryController {
 
     private void updateCSVStatus() {
         String filePath = "src/main/resources/com/example/bank_management_system/bank_database.csv";
-        List<String> lines = new ArrayList<>();
+        MyArrayList<String> lines = new MyArrayList<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = br.readLine()) != null) {
-                String[] values = line.split(",\\s*");
-
+                String[] values = line.split(",");
                 if (values.length >= 5 && "Client".equalsIgnoreCase(values[0])) {
                     try {
                         int parsedAccountNumber = Integer.parseInt(values[1].trim());
                         if (parsedAccountNumber == accountNumber) {
-                            values[4] = status; // Update status in CSV
+                            values[4] = status; // Update the status in the CSV
                             line = String.join(",", values);
                         }
                     } catch (NumberFormatException e) {
@@ -153,6 +150,7 @@ public class TransactionHistoryController {
             e.printStackTrace();
         }
 
+        // Ensure to handle file writing carefully, perhaps using a temporary file to avoid corruption
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
             for (String updatedLine : lines) {
                 bw.write(updatedLine);
@@ -162,6 +160,7 @@ public class TransactionHistoryController {
             e.printStackTrace();
         }
     }
+
 
     public static class Transaction {
         private final String date;

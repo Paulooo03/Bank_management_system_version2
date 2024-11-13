@@ -12,10 +12,6 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ManagerController {
 
@@ -34,7 +30,7 @@ public class ManagerController {
     @FXML
     private Label statusLabel;
 
-    private List<Account> accounts;
+    private MyList<Account> accounts;
     private static final String CSV_FILE_PATH = "src/main/resources/com/example/bank_management_system/bank_database.csv";
 
     @FXML
@@ -47,9 +43,9 @@ public class ManagerController {
             checkAccountStatusButton.setDisable(newValue.trim().isEmpty());
         });
 
-        accounts = new ArrayList<>();
+        accounts = new MyList<>();
         try {
-            accounts.addAll(loadAccountsFromCSV(CSV_FILE_PATH, "client"));
+            loadAccountsFromCSV(CSV_FILE_PATH, "client");
             System.out.println("Total accounts loaded: " + accounts.size()); // Debug statement
         } catch (IOException e) {
             e.printStackTrace();
@@ -120,8 +116,7 @@ public class ManagerController {
         statusLabel.setText("");
     }
 
-    private List<Account> loadAccountsFromCSV(String filePath, String accountType) throws IOException {
-        List<Account> accounts = new ArrayList<>();
+    private void loadAccountsFromCSV(String filePath, String accountType) throws IOException {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -143,7 +138,6 @@ public class ManagerController {
                 }
             }
         }
-        return accounts;
     }
 
     private boolean isNumeric(String str) {
@@ -159,7 +153,8 @@ public class ManagerController {
     }
 
     private Account getAccountDetails(String accountNumber) {
-        for (Account account : accounts) {
+        for (int i = 0; i < accounts.size(); i++) {
+            Account account = accounts.get(i);
             if (account.getAccountNumber().equals(accountNumber)) {
                 return account;
             }
@@ -181,15 +176,22 @@ public class ManagerController {
         account.setStatus(newStatus);
 
         try {
-            List<String> lines = Files.readAllLines(Paths.get(CSV_FILE_PATH));
-            try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(CSV_FILE_PATH))) {
-                for (String line : lines) {
+            MyList<String> lines = new MyList<>();
+            try (BufferedReader br = new BufferedReader(new FileReader(CSV_FILE_PATH))) {
+                String line;
+                while ((line = br.readLine()) != null) {
                     String[] values = line.split(",");
                     if (values.length >= 5 && values[1].trim().equals(accountNumber)) {
                         values[4] = newStatus;
                         line = String.join(",", values);
                     }
-                    writer.write(line);
+                    lines.add(line);
+                }
+            }
+
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(CSV_FILE_PATH))) {
+                for (int i = 0; i < lines.size(); i++) {
+                    writer.write(lines.get(i));
                     writer.newLine();
                 }
             }

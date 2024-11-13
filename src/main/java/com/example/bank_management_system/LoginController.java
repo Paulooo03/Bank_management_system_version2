@@ -17,8 +17,6 @@ import javafx.stage.Stage;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class LoginController {
@@ -35,11 +33,11 @@ public class LoginController {
     @FXML
     private Button debugButton;
 
-    private List<Account> accounts;
+    private MyArrayList<Account> accounts;
 
     @FXML
     public void initialize() {
-        accounts = new ArrayList<>();
+        accounts = new MyArrayList<>();
         try {
             accounts.addAll(loadAccountsFromCSV("src/main/resources/com/example/bank_management_system/bank_database.csv"));
             System.out.println("Total accounts loaded: " + (accounts.size() - 1 ));
@@ -77,8 +75,8 @@ public class LoginController {
         }
     }
 
-    private List<Account> loadAccountsFromCSV(String filePath) throws IOException {
-        List<Account> accounts = new ArrayList<>();
+    private MyArrayList<Account> loadAccountsFromCSV(String filePath) throws IOException {
+        MyArrayList<Account> accounts = new MyArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -99,7 +97,8 @@ public class LoginController {
     }
 
     private Account validateLogin(String accountNumber, String password) {
-        for (Account account : accounts) {
+        for (int i = 0; i < accounts.size(); i++) {
+            Account account = accounts.get(i);
             if (account.getAccountNumber().equals(accountNumber) && account.getPassword().equals(password)) {
                 if (account.getPosition().equalsIgnoreCase("admin") || account.getStatus().equals("Active")) {
                     return account;
@@ -184,7 +183,8 @@ public class LoginController {
     }
 
     private String getClientNameFromAccount(String accountNumber) {
-        for (Account account : accounts) {
+        for (int i = 0; i < accounts.size(); i++) {
+            Account account = accounts.get(i);
             if (account.getAccountNumber().equals(accountNumber)) {
                 return account.getUsername();
             }

@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Map;
+//import java.util.Map;
 
 public class HelloController {
 
@@ -137,13 +137,13 @@ public class HelloController {
     }
 
     private boolean validateLogin(String role, String username, String password) {
-        Map<String, String> credentials;
+        HashMapStructure<String, String> credentials;
         switch (role) {
             case "Manager":
-                credentials = (Map<String, String>) managerCredentials;
+                credentials = managerCredentials;
                 break;
             case "Teller":
-                credentials = (Map<String, String>) tellerCredentials;
+                credentials = tellerCredentials;
                 break;
             case "Client":
                 return true; // Bypass login for Client

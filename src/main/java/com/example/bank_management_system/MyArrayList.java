@@ -1,6 +1,8 @@
 package com.example.bank_management_system;
 
-public class MyArrayList<T> {
+import java.util.Iterator;
+
+public class MyArrayList<T> implements Iterable<T> {
     private Object[] elements;
     private int size;
 
@@ -15,6 +17,13 @@ public class MyArrayList<T> {
             ensureCapacity();
         }
         elements[size++] = element;
+    }
+
+    // Add all elements from another array to this list
+    public void addAll(MyArrayList<T> otherList) {
+        for (int i = 0; i < otherList.size(); i++) {
+            add((T) otherList.get(i));
+        }
     }
 
     // Get an element by index
@@ -64,5 +73,26 @@ public class MyArrayList<T> {
             newArray[i] = elements[i];
         }
         elements = newArray;
+    }
+
+    // Implement the iterator method required for Iterable
+    @Override
+    public Iterator<T> iterator() {
+        return new Iterator<T>() {
+            private int index = 0;
+
+            @Override
+            public boolean hasNext() {
+                return index < size;
+            }
+
+            @Override
+            public T next() {
+                if (!hasNext()) {
+                    throw new IndexOutOfBoundsException("No more elements");
+                }
+                return (T) elements[index++];
+            }
+        };
     }
 }
